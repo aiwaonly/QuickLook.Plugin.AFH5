@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -26,36 +26,22 @@ public class Plugin : IViewer
 
     public void Prepare(string path, ContextObject context)
     {
-        context.PreferredSize = new Size { Width = 600, Height = 600 };
+        if (path.ToLower().EndsWith(".cas.h5"))
+        {
+            context.PreferredSize = new Size { Width = 1100, Height = 700 };
+            context.CanResize = true;
+        }
+        else
+        {
+            context.PreferredSize = new Size { Width = 600, Height = 600 };
+        }
     }
 
     public void View(string path, ContextObject context)
     {
         if (path.ToLower().EndsWith(".cas.h5"))
         {
-            string content = CasH5.Read(path);
-
-            var textBox = new TextBox
-            {
-                Text = content,
-                IsReadOnly = true,
-                IsReadOnlyCaretVisible = true,
-                Padding = new Thickness(10),
-                TextWrapping = TextWrapping.Wrap,
-                BorderThickness = new Thickness(0),
-                Margin = new Thickness(0, 0, 0, -5)
-            };
-
-            var scrollViewer = new ScrollViewer
-            {
-                Content = textBox,
-                VerticalScrollBarVisibility = ScrollBarVisibility.Auto,
-                HorizontalScrollBarVisibility = ScrollBarVisibility.Disabled,
-                VerticalAlignment = VerticalAlignment.Stretch,
-                HorizontalAlignment = HorizontalAlignment.Stretch,
-            };
-
-            context.ViewerContent = scrollViewer;
+            context.ViewerContent = new CasH5Panel(path, context.Theme);
         }
         else if (path.ToLower().EndsWith("msh.h5"))
         {
@@ -97,6 +83,7 @@ public class Plugin : IViewer
 
             context.ViewerContent = view_point;
         }
+
         context.Title = $"{Path.GetFileName(path)}";
         context.IsBusy = false;
     }

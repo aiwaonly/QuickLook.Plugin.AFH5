@@ -1,4 +1,4 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
     <PropertyGroup>
         <OutputType>Library</OutputType>
         <TargetFramework>net462</TargetFramework>
@@ -39,10 +39,8 @@
     </ItemGroup>
 
     <ItemGroup>
-      <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3" />
-      <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-      <PackageReference Include="PureHDF" Version="1.0.1" />
-      <PackageReference Include="QuickLook.Common" Version="4.5.0" />
-      <PackageReference Include="Untitled.Sexp" Version="0.1.2" />
+        <PackageReference Include="HelixToolkit.Wpf" Version="2.27.3" />
+        <PackageReference Include="PureHDF" Version="1.0.1" />
+        <PackageReference Include="QuickLook.Common" Version="4.5.0" />
     </ItemGroup>
 </Project>

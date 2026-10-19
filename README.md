@@ -4,7 +4,7 @@
 
 A plugin to preview Ansys Fluent cas.h5 and msh.h5 file.
 
-<img src="./example/msh_example.png" alt="cas example" width="49%">  <img src="./example/cas_example.png" alt="msh example" width="49%">
+<img src="./example/msh_example.png" alt="cas example" width="75%">  <img src="./example/cas_example.png" alt="msh example" width="100%">
 
 ## Structure of cas.h5
 
@@ -22,7 +22,7 @@ After opening `.cas.h5` file using HDFView, there are following groups:
 
 The **settings** group contains multiple datasets, which contain the simulation configuration information stored as S-expression strings which you can find in the **example** folder.
 
-1. Cortex Variables: Face IDs and display settings
+1. Cortex Variables: Face IDs and surface settings
 2. Domain Variables: Meaning unclear (e.g. (64 ()))
 3. Origin: Ansys Fluent build information (e.g. ANSYS_FLUENT 25.2 Build 10204)
 4. [Rampant Variables](https://innovationspace.ansys.com/forum/forums/topic/what-does-rp-in-rp-variable-stand-for/): Most settings
@@ -38,17 +38,24 @@ The **settings** group contains multiple datasets, which contain the simulation 
 
 ### cas.h5
 
-This plugin now only show the most frequent information, including:
+The plugin renders the case settings as indented JSON. It currently reads:
 
 - solver
-- material
-- cell zone
-- boundary condition
-- discretization scheme
-- under-relaxation factor
+- materials
+- boundary condition (cell zones and face zones)
+- mesh interfaces
+- custom field functions
+- units
+- named expressions
+- solution methods and controls
+- report definitions
+- residuals
+- monitor sets, plot sets, convergence sets
+- cell registers
 - iteration
-
-They are extracted by regular expression or S-expression parser. PRs are welcome to add more.
+- surfaces
+- graphics (mesh, contours, vectors, pathlines, xy-plot, scene)
+- input/output parameters
 
 ## Try out
 
@@ -58,14 +65,6 @@ They are extracted by regular expression or S-expression parser. PRs are welcome
 4. Restart QuickLook.
 5. Select the cas.h5/msh.h5 file and press `Spacebar`.
 
-## Thanks
-
-- [QuickLook](https://github.com/QL-Win/QuickLook): Bring macOS “Quick Look” feature to Windows
-- [PureHDF](https://github.com/Apollo3zehn/PureHDF): A pure .NET library that makes reading and writing of HDF5 files (groups, datasets, attributes, ...) very easy.
-- [Untitled.Sexp](https://github.com/salyu9/Untitled.Sexp): Simple .Net library for reading, writing and serializing s-expressions.
-- [HelixToolkit.Wpf](https://github.com/helix-toolkit/helix-toolkit): Helix Toolkit is a collection of 3D components for .NET.
-- [vtkFLUENTCFFReader](https://github.com/Kitware/VTK/tree/master/IO/FLUENTCFF): Provide a reader for the FluentCFF file format.
-
 ## License
 
-MIT
+[MIT](./LICENSE)
