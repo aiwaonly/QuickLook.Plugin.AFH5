@@ -372,6 +372,15 @@ public static partial class CaseReader
         // is the property value, the trailing ones are alternative models.
         if (parts[0] is SexpPair or SexpNull)
         {
+            // Orthotropic conductivity nests one level deeper than the rest —
+            // (orthotropic (direction-0 1 0 0) (k0 (constant . 16.))) — so its
+            // children have to be read as a structure rather than flattened.
+            var structured = Sexp.Elements(parts[0]);
+            if (structured.Count > 0 && Sexp.Text(structured[0]) == "orthotropic")
+            {
+                return ReadOrthotropic(structured.GetRange(1, structured.Count - 1));
+            }
+
             // Flatten, not Elements: a selection such as
             // (polynomial . (807.163 . (3.58 . ()))) must expand to its scalars.
             var selection = Sexp.Flatten(parts[0]);
@@ -390,7 +399,6 @@ public static partial class CaseReader
                 "polynomial" when tail.Count > 0
                                   && Sexp.Text(tail[0]) is "piecewise-linear" or "piecewise-polynomial" or "nasa-9-piecewise-polynomial" =>
                     ReadPolynomial(Sexp.Text(tail[0]), tail.GetRange(1, tail.Count - 1)),
-                "orthotropic" => ReadOrthotropic(tail),
                 // A single-value selection such as (constant . 2719) or (none . #f).
                 _ when tail.Count == 1 => $"{head}/{Sexp.Text(tail[0])}",
                 // Anything else keeps its selector as the key, e.g.
@@ -458,8 +466,9 @@ public static partial class CaseReader
             var name = Sexp.Text(fields[0]);
             if (name is "direction-0" or "direction-1" or "direction-2")
             {
+                // The direction vector is written as a list literal, e.g. "1, 0, 0".
                 var directions = fields.GetRange(1, fields.Count - 1).ConvertAll(Sexp.Text);
-                value[name] = string.Join(" ", directions);
+                value[name] = string.Join(", ", directions);
             }
             else if (name is "k0" or "k1" or "k2")
             {

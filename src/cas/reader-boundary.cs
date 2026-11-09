@@ -183,27 +183,34 @@ public static partial class CaseReader
             }
 
             var equation = Sexp.Text(fields[0]);
-            var sourceProperty = Sexp.Elements(fields[1]);
-            if (sourceProperty.Count == 0)
+
+            // (energy ((profile sel expr) (constant . 0) (inactive . #f))): the
+            // equations carry a list of alternative bindings and only the first
+            // one describes the active source.
+            var bindings = Sexp.Elements(fields[1]);
+            if (bindings.Count == 0)
             {
                 continue;
             }
 
-            // ((profile "udf" "name") ...) or ((constant . 0) ...)
-            var selection = Sexp.Elements(sourceProperty[0]);
-            if (selection.Count == 0)
+            var selection = Sexp.Elements(bindings[0]);
+            if (selection.Count < 2)
             {
                 continue;
             }
 
-            var kind = Sexp.Text(selection[0]);
-            if (kind == "profile" && selection.Count >= 3)
+            // (constant . 6802.1) keeps the dotted-pair marker in the middle.
+            if (selection.Count >= 3 && Sexp.IsDot(selection[1]))
             {
+                value[equation] = $"{Sexp.Text(selection[0])}/{Sexp.Text(selection[2])}";
+            }
+            else if (selection.Count >= 3
+                     && Sexp.Text(selection[0]) == "profile"
+                     && Sexp.Text(selection[1]).Length > 0)
+            {
+                // (profile sel expr) applies only when it names an expression;
+                // an empty one means the source is undefined and is left out.
                 value[equation] = $"profile/{Sexp.Text(selection[1])}/{Sexp.Text(selection[2])}";
-            }
-            else if (selection.Count >= 2 && kind == "constant")
-            {
-                value[equation] = $"constant/{Sexp.Text(selection[1])}";
             }
         }
         return value;

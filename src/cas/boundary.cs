@@ -252,6 +252,7 @@ public sealed class Fluid(string name, string id) : BoundaryBase(name, id)
 
     [BoundaryField("general")] public string? Material { get; set; }
     [BoundaryField("general")] public string? Sources { get; set; }
+    [BoundaryField("general")] public string? SourceTerms { get; set; }
     [BoundaryField("general")] public string? Fixed { get; set; }
     [BoundaryField("general")] public string? MrfMotion { get; set; }
     [BoundaryField("general")] public string? MgridMotion { get; set; }
@@ -259,6 +260,7 @@ public sealed class Fluid(string name, string id) : BoundaryBase(name, id)
     [BoundaryField("general")] public string? Laminar { get; set; }
     [BoundaryField("general")] public string? Porous { get; set; }
     [BoundaryField("general")] public string? Fanzone { get; set; }
+    [BoundaryField("general")] public string? Radiating { get; set; }
 
     [BoundaryField("reference-frame")] public string? XOrigin { get; set; }
     [BoundaryField("reference-frame")] public string? YOrigin { get; set; }
@@ -301,6 +303,7 @@ public sealed class Solid(string name, string id) : BoundaryBase(name, id)
 
     [BoundaryField("general")] public string? Material { get; set; }
     [BoundaryField("general")] public string? Sources { get; set; }
+    [BoundaryField("general")] public string? SourceTerms { get; set; }
     [BoundaryField("general")] public string? Fixed { get; set; }
     [BoundaryField("general")] public string? SolidMotion { get; set; }
     [BoundaryField("general")] public string? Radiating { get; set; }
@@ -343,8 +346,8 @@ public sealed class VelocityInlet(string name, string id) : BoundaryBase(name, i
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class MassFlowInlet(string name, string id) : BoundaryBase(name, id)
@@ -377,8 +380,8 @@ public sealed class MassFlowInlet(string name, string id) : BoundaryBase(name, i
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class PressureInlet(string name, string id) : BoundaryBase(name, id)
@@ -409,8 +412,8 @@ public sealed class PressureInlet(string name, string id) : BoundaryBase(name, i
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class PressureFarField(string name, string id) : BoundaryBase(name, id)
@@ -439,8 +442,8 @@ public sealed class PressureFarField(string name, string id) : BoundaryBase(name
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class IntakeFan(string name, string id) : BoundaryBase(name, id)
@@ -489,8 +492,8 @@ public sealed class PressureOutlet(string name, string id) : BoundaryBase(name, 
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class MassFlowOutlet(string name, string id) : BoundaryBase(name, id)
@@ -511,8 +514,8 @@ public sealed class MassFlowOutlet(string name, string id) : BoundaryBase(name, 
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class Outflow(string name, string id) : BoundaryBase(name, id)
@@ -523,8 +526,8 @@ public sealed class Outflow(string name, string id) : BoundaryBase(name, id)
 
     [BoundaryField("radiation")] public string? RadiationBc { get; set; }
     [BoundaryField("radiation")] public string? InEmiss { get; set; }
-    [BoundaryField("radiation")] public string? TBBspec { get; set; }
-    [BoundaryField("radiation")] public string? TBB { get; set; }
+    [BoundaryField("radiation", "t_b_b_spec")] public string? TBBSpec { get; set; }
+    [BoundaryField("radiation", "t_b_b")] public string? TBB { get; set; }
 }
 
 public sealed class ExhaustFan(string name, string id) : BoundaryBase(name, id)

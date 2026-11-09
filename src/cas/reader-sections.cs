@@ -700,7 +700,10 @@ public static partial class CaseReader
                     case "edge-type" when parts.Count >= 2:
                         properties[propertyName] = Sexp.Text(parts[1]);
                         break;
-                    case "coloring" when parts.Count >= 3:
+                    // (coloring <type> <option> . <flag>): the trailing flag is
+                    // what makes the row a colouring, so a bare
+                    // (coloring smooth . #t) is not one.
+                    case "coloring" when parts.Count == 5 && Sexp.IsDot(parts[3]):
                         properties[propertyName] = new Dictionary<string, object>(StringComparer.Ordinal)
                         {
                             ["type"] = Sexp.Text(parts[1]),
